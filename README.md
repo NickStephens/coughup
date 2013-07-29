@@ -3,6 +3,10 @@ CoughUp
 
 A simple language used to quickly generate LaTeX invoices.
 
+### Usage
+
+> $ coughup work-7.15-1.26.inv
+
 ### Grammar
 
 Invoice &rarr; name companyname address email phonenumber rate period { shift }
@@ -31,6 +35,6 @@ shift &rarr; '$' month/day/year '$' time (am|pm) - time (am|pm) '$'
 #### Dependencies
 * TeXLive Core
 * Parsec2
-* Invoice template by Trey Hunner
+* TeX invoice template by Trey Hunner
 
 ![http://legacy.cs.uu.nl/daan/parsec.html](http://legacy.cs.uu.nl/daan/images/parsec.gif)
