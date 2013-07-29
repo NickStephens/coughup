@@ -23,7 +23,10 @@ period &rarr; '&' month/day/year - month/day/year '&'
 
 shift &rarr; '$' month/day/year '$' time (am|pm) - time (am|pm) '$'
 
+#### Installation
 
+* make all
+* sudo make install
 
 #### Dependencies
 * TeXLive Core
