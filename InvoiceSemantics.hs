@@ -44,10 +44,8 @@ invoiceTable shifts =
     "\\end{invoiceTable}\n"
 
 toTexTableEntry (Shift day period) rate = "\\hourrow{" ++ (show day) ++ "}{" ++ 
-    (show $ hoursWorked period) ++ "}{" ++ (show rate) ++ "}"
+    (show $ hoursWorked period) ++ "}{" ++ (show rate) ++ "}\n"
     where hoursWorked (HourPeriod date1 date2) = diffDate date1 date2
-
---diffDate :: Fractional a => TimeOfDay -> TimeOfDay -> a
 
 diffDate (TimeOfDay ehour emin esec) (TimeOfDay lhour lmin lsec)  = (fromIntegral (lhour - ehour)) + 
     ((fromIntegral $ lmin - emin) / 60)
