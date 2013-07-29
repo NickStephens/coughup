@@ -37,4 +37,4 @@ shift &rarr; '$' month/day/year '$' time (am|pm) - time (am|pm) '$'
 * Parsec2
 * TeX invoice template by Trey Hunner
 
-![http://legacy.cs.uu.nl/daan/parsec.html](http://legacy.cs.uu.nl/daan/images/parsec.gif)
+<a href=http://legacy.cs.uu.nl/daan/parsec.html>![http://legacy.cs.uu.nl/daan/parsec.html](http://legacy.cs.uu.nl/daan/images/parsec.gif)</a>
