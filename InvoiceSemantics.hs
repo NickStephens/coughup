@@ -7,45 +7,48 @@ import Text.ParserCombinators.Parsec
 
 {- Converts invoice datatypes to latex semantics -}
 
-main file = do
+main file toWrite = do
     f <- parseFromFile invoice file
     case f of
         Left err -> print err
-        Right inv -> print $ invoiceToTex inv
+        Right inv -> writeFile (toWrite ++ ".tex") (invoiceToTex inv)
 
 invoiceToTex (Invoice employee place streetaddr 
     email phonenum rate period shifts) =
     invoicePreamble ++
     (invoiceHeading place streetaddr phonenum email employee) ++
-    (test shifts rate)
+    (test shifts rate) ++
+    "\\end{document}"
 
 test shifts i = invoiceTable (zip shifts (gen i (length shifts)))
 
 --test shifts rate = invoiceTable (zip shifts (gen rate (length shifts)))
 
 invoicePreamble = 
-    "\\documentclass[11pt]{invoice}" ++
-    "\\ \\tab {\\hspace*{3ex}}" ++
-    "\\begin{document}" 
+    "\\documentclass[11pt]{invoice}\n" ++
+    "\\def \\tab {\\hspace*{3ex}}\n" ++
+    "\\begin{document}\n" 
 
 invoiceHeading place address phonenum email employee = 
-    "\\hfil{\\Huge\\bf" ++ place ++ "}\\hfil % Company providing the invoice" ++
-    "\\bigskip\\break % Whitespace" ++
-    "\\hrule % Horizontal line" ++
-    address ++ "\\hfill " ++ phonenum ++ "\\\\ % Your address and contact information" ++
-    "\\hfill " ++ email ++
-    "\\\\ \\\\" ++
-    "{\\bf Invoice To:} \\\\" ++
-    "\\tab " ++ employee ++ "\\\\ % Invoice recipient" ++
-    "{\\bf Date:} \\\\" ++
-    "\\tab \\today \\\\ % Invoice date"
+    let (street, rest) = (\x -> x /= ',') `span` address in
+    "\\hfil{\\Huge\\bf " ++ place ++ "}\\hfil % Company providing the invoice\n" ++
+    "\\bigskip\\break % Whitespace\n" ++
+    "\\hrule % Horizontal line\n" ++
+    street ++ ",\\hfill " ++ phonenum ++ "\\\\ % Your address and contact information\n" ++
+    (tail rest) ++ "\\hfill " ++ email ++
+    "\\\\ \\\\\n" ++
+    "{\\bf Invoice To:} \\\\\n" ++
+    "\\tab " ++ employee ++ "\\\\ % Invoice recipient\n" ++
+    "{\\bf Date:} \\\\\n" ++
+    "\\tab \\today \\\\ % Invoice date\n"
 
 invoiceTable shifts = 
-    "\\begin{invoiceTable}" ++ 
-    "\\feetype{Consulting Services}" ++ 
+    "\\begin{invoiceTable}\n" ++ 
+    "\\feetype{Consulting Services}\n" ++ 
     (concat $ map (uncurry toTexTableEntry) shifts) ++ 
-    "\\end{invoiceTable}"
-     
+    "\\subtotal\n" ++
+    "\\end{invoiceTable}\n"
+
 toTexTableEntry (Shift day period) rate = "\\hourrow{" ++ (show day) ++ "}{" ++ 
     (show $ hoursWorked period) ++ "}{" ++ (show rate) ++ "}"
     where hoursWorked (HourPeriod date1 date2) = diffDate date1 date2
