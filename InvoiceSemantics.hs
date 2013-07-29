@@ -7,11 +7,15 @@ import Text.ParserCombinators.Parsec
 
 {- Converts invoice datatypes to latex semantics -}
 
-main file toWrite = do
+main file = do
     f <- parseFromFile invoice file
     case f of
         Left err -> print err
-        Right inv -> writeFile (toWrite ++ ".tex") (invoiceToTex inv)
+        Right inv -> writeFile output (invoiceToTex inv)
+        where output = (times init 4 file) ++ ".tex"
+              times f 0 x = x
+              times f n x = f (times f (n-1) x)
+          
 
 invoiceToTex (Invoice employee place streetaddr 
     email phonenum rate period shifts) =
