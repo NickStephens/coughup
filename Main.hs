@@ -14,6 +14,8 @@ main = do
     f <- parseFromFile invoice file
     case f of
         Left err -> print err
-        Right inv -> writeFile output (invoiceToTex inv)
+        Right inv -> do
+                    putStrLn $ "writing TeX to: " ++ output
+                    writeFile output (invoiceToTex inv)
         where times f 0 x = x
               times f n x = f (times f (n-1) x)
