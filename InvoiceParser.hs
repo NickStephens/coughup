@@ -4,16 +4,6 @@ import Text.ParserCombinators.Parsec
 import Data.Time
 import System.Locale
 
-
-data LHeader = LHeader LStatement
-
-data LBody = LBody [LStatement]
-
-data LFooter = LFooter LStatement
-
-{- A Latex Statement -}
-data LStatement = LStatement String
-
 data Invoice = Invoice { employee :: String, placeOfEmployment :: String, address :: String, 
     email :: String, phonenum :: String, rateOfPay :: Int, period :: DatePeriod, shifts :: [Shift] }
     deriving Show
@@ -30,12 +20,6 @@ data HourPeriod = HourPeriod TimeOfDay TimeOfDay
 
 data Shift = Shift Day HourPeriod
     deriving (Show, Eq)
-
-main file = do
-    f <- parseFromFile invoice file
-    case f of
-        Left err -> print err
-        Right inv -> print inv
 
 invoice = do
         employee <- name
