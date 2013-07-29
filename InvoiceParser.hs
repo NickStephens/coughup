@@ -14,7 +14,8 @@ data LFooter = LFooter LStatement
 {- A Latex Statement -}
 data LStatement = LStatement String
 
-data Invoice = Invoice { employee :: String, rateOfPay :: Int, period :: DatePeriod, shifts :: [Shift] }
+data Invoice = Invoice { employee :: String, placeOfEmployment :: String, address :: String, 
+    email :: String, phonenum :: String, rateOfPay :: Int, period :: DatePeriod, shifts :: [Shift] }
     deriving Show
 
 -- This is just cosmetic for now
@@ -27,7 +28,7 @@ data DatePeriod = DatePeriod Day Day
 data HourPeriod = HourPeriod TimeOfDay TimeOfDay
     deriving (Show, Eq)
 
-data Shift = Shift Day [HourPeriod]
+data Shift = Shift Day HourPeriod
     deriving (Show, Eq)
 
 main file = do
@@ -39,19 +40,26 @@ main file = do
 invoice = do
         employee <- name
         many1 space
+        place <- name
+        many1 space
+        addr <- name  
+        many1 space
+        email <- name
+        many1 space
+        phonenum <- name
+        many1 space
         rateOfPay <- rate
         many1 space
         period <- datePeriod
         many1 space
         shifts <- shift `endBy` (many space)
-        return $ Invoice employee (read rateOfPay :: Int) period shifts
+        return $ Invoice employee place addr email phonenum (read rateOfPay :: Int) period shifts
     
 name :: Parser String
 name = do
         char ':'
         many space
-        yourName <- many1 (alphaNum <|> space)
-        char ':'
+        yourName <- manyTill anyChar (try (char ':'))
         return yourName 
 
 datePeriod = do 
@@ -81,7 +89,7 @@ shift = do
         char '$'
         shiftDate <- date
         char '$'
-        periods <- hourPeriod `sepBy` (char ',')
+        periods <- hourPeriod
         char '$'
         return $ Shift shiftDate periods
          
